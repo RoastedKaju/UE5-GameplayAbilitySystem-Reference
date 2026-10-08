@@ -4,13 +4,14 @@
 
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "AbilitySystemBlueprintLibrary.h"
 
 ABaseCharacter::ABaseCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Add the ability system component
-	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
+	AbilitySystemComponent = CreateDefaultSubobject<UBaseAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 	AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent->SetReplicationMode(AbilitySystemReplicationMode);
 
@@ -39,7 +40,6 @@ ABaseCharacter::ABaseCharacter()
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 void ABaseCharacter::PossessedBy(AController* NewController)
@@ -50,6 +50,7 @@ void ABaseCharacter::PossessedBy(AController* NewController)
 	if (AbilitySystemComponent)
 	{
 		AbilitySystemComponent->InitAbilityActorInfo(this, this);
+		GrantAbilities(StartingAbilities);
 	}
 }
 
@@ -64,20 +65,57 @@ void ABaseCharacter::OnRep_PlayerState()
 	}
 }
 
+TArray<FGameplayAbilitySpecHandle> ABaseCharacter::GrantAbilities(TArray<TSubclassOf<UGameplayAbility>> AbilitiesToGrant)
+{
+	if (!AbilitySystemComponent || !HasAuthority())
+	{
+		return TArray<FGameplayAbilitySpecHandle>();
+	}
+
+	TArray<FGameplayAbilitySpecHandle> Handles;
+
+	for (const TSubclassOf<UGameplayAbility> Ability : AbilitiesToGrant)
+	{
+		Handles.Add(AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(Ability, 1, -1, this)));
+	}
+
+	return Handles;
+}
+
+void ABaseCharacter::RemoveAbilities(const TArray<FGameplayAbilitySpecHandle>& AbilitiesToRemove)
+{
+	if (!AbilitySystemComponent || !HasAuthority())
+	{
+		return;
+	}
+
+	for (const auto AbilitySpecHandle : AbilitiesToRemove)
+	{
+		AbilitySystemComponent->ClearAbility(AbilitySpecHandle);
+	}
+}
+
+void ABaseCharacter::SendAbilitiesChangedGameplayEvent()
+{
+	const FGameplayTag EventTag = FGameplayTag::RequestGameplayTag("Event.Abilities.Changed");
+	FGameplayEventData EventData;
+	EventData.Instigator = this;
+	EventData.Target = this;
+	
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(this, EventTag, EventData);
+}
+
 void ABaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
 
 UAbilitySystemComponent* ABaseCharacter::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
 }
-
