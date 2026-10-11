@@ -105,6 +105,11 @@ void ABaseCharacter::SendAbilitiesChangedGameplayEvent()
 	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(this, EventTag, EventData);
 }
 
+void ABaseCharacter::SendGameplayEventToSelf_Implementation(const FGameplayEventData EventData)
+{
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(this, EventData.EventTag, EventData);
+}
+
 void ABaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);

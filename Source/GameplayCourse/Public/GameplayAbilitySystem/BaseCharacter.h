@@ -33,6 +33,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Ability System")
 	void SendAbilitiesChangedGameplayEvent();
 
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Ability System")
+	void SendGameplayEventToSelf(const FGameplayEventData EventData);
+	
 protected:
 	virtual void BeginPlay() override;
 
