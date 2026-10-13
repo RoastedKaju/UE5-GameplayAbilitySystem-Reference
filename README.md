@@ -99,9 +99,10 @@ void ABaseCharacter::OnRep_PlayerState()
 }
 ```
 
-## Abilities
+## Examples
  - [Dash Ability](Docs/Dash/Dash.md)
  - [Area Trigger Ability](Docs/Area/Area.md)
  - [Health/Stamina Widget](Docs/Widgets/Widgets.md)
  - [Weapon Setup](Docs/WeaponSetup/WeaponSetup.md)
+ - [Ability Tags](Docs/Tags/Tags.md)
  - [Melee](Docs/Melee/Melee.md)
