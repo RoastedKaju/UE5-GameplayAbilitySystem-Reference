@@ -55,3 +55,8 @@ void UBasicAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectM
 		SetStamina(GetStamina());
 	}
 }
+
+void UBasicAttributeSet::PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue)
+{
+	Super::PostAttributeChange(Attribute, OldValue, NewValue);
+}
