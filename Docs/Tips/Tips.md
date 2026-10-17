@@ -20,6 +20,35 @@ This also means that in your attribute set class make sure to override functions
 
 In these functions you can do a simple `if` check to see which attribute was modified and changed then you can perform clamping or even broadcast events.
 
+### Required Tags Inside Gameplay Effect
+Let's say you have an effect that assigns the invincibility tag onto your player, in order to avoid taking damage you need to go into all of your effects that are damage related and add a component called `RequiredTagsToApply/ContinueThisEffect`, and in that component add the invincibility tag in `Must Not Have` section.
+
+This is not a good way because in case you change the tag or add new damage effect you will need to add this component to all and maintain them, another issue is this will completely block damage, may you want to reduce the damage taken as if you have a shield ability active.
+
+In that case you should use `Custom Calculation Class`.
+
+### Custom Calculation Class
+This is where you can do custom calculations before making changes to an attribute, simple go to your gameplay effect and change the modifer from `Set By Caller` to `Custom Calculation Class`.
+
+Once that is done, you can create a new calculation class and override a function that returns a floating point value.
+
+The Best part is you can still get the magnitude value using the tag inside this function like this:
+<p align="center">
+<img src="SetByCallerInCustomCalculation.jpg" alt="Header"/>
+</p>
+
+Another good thing that you can get from the spec handle is the target tags, in most cases the target is also you if you use apply gameplay effect on Owner or Self but this works on any target.
+
+Here We are only applying half of damage if the target (We Ourselves) has shield tag:
+<p align="center">
+<img src="TargetTagsInCustomCalculation.jpg" alt="Header"/>
+</p>
+
+>For more flexible calculations it is recommended that you use the execution class instead.
+
+### Use Curves To Modify the Values In Gameplay Effects
+
+
 ## Death Is An Ability
 What happens when your attribute for health goes below `0`? We activate the death ability, death is a passive ability granted at start which applies an infinite gameplay effect to the owner.
 
@@ -72,6 +101,12 @@ Similarly if your cue needs some information like the location where particles w
 <img src="CueWithParamsInsideAbility.jpg" alt="Header"/>
 </p>
 
+Gameplay Effects can also have Cues, which are automatically destroyed once the effect expires, this is useful for abilities like Shield or buffs which just apply a gameplay effect to owner and in that effect you can assign a cue.
+
+>In case you want to spawn an actor as cue make sure that you sub-class `GameplayCueActor` and in its class defaults there is a tick option called `Attach To Owner`.
+
+
+
 ## Combos
 Some abilities in your game would be massive like combos that play different animations and require input to progress.
 <p align="center">
@@ -89,3 +124,10 @@ And inside your character class on input you can send another gameplay event tha
 <p align="center">
 <img src="ComboInCharacterInputEvent.jpg" alt="Header"/>
 </p>
+
+## Check If Ability User is Player Controller or AI
+In your base ability class you can create a very handy function that allows you to check if the user is AI Controller or Player, this is very helpful in abilities that don't work when the user is AI or requires input.
+
+```cpp
+Code Here
+```
