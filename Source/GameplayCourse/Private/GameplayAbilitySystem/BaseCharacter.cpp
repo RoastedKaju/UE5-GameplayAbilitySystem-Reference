@@ -15,8 +15,9 @@ ABaseCharacter::ABaseCharacter()
 	AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent->SetReplicationMode(AbilitySystemReplicationMode);
 
-	// Add the basic attribute set
+	// Add the attribute sets
 	BasicAttributeSet = CreateDefaultSubobject<UBasicAttributeSet>(TEXT("BasicAttributeSet"));
+	CombatAttributeSet = CreateDefaultSubobject<UCombatAttributeSet>(TEXT("CombatAttributeSet"));
 
 	// Set size for collision
 	GetCapsuleComponent()->InitCapsuleSize(35.0f, 90.0f);
@@ -101,7 +102,7 @@ void ABaseCharacter::SendAbilitiesChangedGameplayEvent()
 	FGameplayEventData EventData;
 	EventData.Instigator = this;
 	EventData.Target = this;
-	
+
 	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(this, EventTag, EventData);
 }
 

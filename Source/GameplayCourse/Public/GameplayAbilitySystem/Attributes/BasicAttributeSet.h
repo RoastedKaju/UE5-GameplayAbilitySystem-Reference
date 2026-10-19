@@ -35,13 +35,14 @@ public:
 	FGameplayAttributeData MaxStamina;
 	ATTRIBUTE_ACCESSORS_BASIC(UBasicAttributeSet, MaxStamina);
 
-	UPROPERTY(BlueprintReadONLY, Category = "Attributes", ReplicatedUsing = OnRep_Damage)
-	FGameplayAttributeData Damage;
-	ATTRIBUTE_ACCESSORS_BASIC(UBasicAttributeSet, Damage);
-
 	UPROPERTY(BlueprintReadOnly, Category = "Attributes", ReplicatedUsing = OnRep_Heal)
 	FGameplayAttributeData Heal;
 	ATTRIBUTE_ACCESSORS_BASIC(UBasicAttributeSet, Heal);
+
+	// Only needs to be on server so no need for OnRep
+	UPROPERTY(BlueprintReadOnly, Category = "Attributes")
+	FGameplayAttributeData Damage;
+	ATTRIBUTE_ACCESSORS_BASIC(UBasicAttributeSet, Damage);
 
 public:
 	UFUNCTION()

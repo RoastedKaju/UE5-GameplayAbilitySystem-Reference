@@ -8,6 +8,7 @@
 #include "AbilitySystemComponent.h"
 #include "BaseAbilitySystemComponent.h"
 #include "Attributes/BasicAttributeSet.h"
+#include "Attributes/CombatAttributeSet.h"
 #include "BaseCharacter.generated.h"
 
 UCLASS()
@@ -23,7 +24,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-	
+
 	UFUNCTION(BlueprintCallable, Category = "Ability System")
 	TArray<FGameplayAbilitySpecHandle> GrantAbilities(TArray<TSubclassOf<UGameplayAbility>> AbilitiesToGrant);
 
@@ -35,7 +36,7 @@ public:
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Ability System")
 	void SendGameplayEventToSelf(const FGameplayEventData EventData);
-	
+
 protected:
 	virtual void BeginPlay() override;
 
@@ -49,6 +50,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Ability System")
 	UBasicAttributeSet* BasicAttributeSet;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Ability System")
+	UCombatAttributeSet* CombatAttributeSet;
 
 	/**
 	 * Documentation recommends Mixed for player characters and minimal for AI characters

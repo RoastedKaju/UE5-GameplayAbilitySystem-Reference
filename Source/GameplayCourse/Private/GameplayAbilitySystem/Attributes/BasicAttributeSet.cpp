@@ -12,8 +12,8 @@ UBasicAttributeSet::UBasicAttributeSet()
 	MaxHealth = 100.0f;
 	Stamina = 100.0f;
 	MaxStamina = 100.0f;
-	Damage = 25.0f;
 	Heal = 25.0f;
+	Damage = 0.0f;
 }
 
 void UBasicAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
@@ -24,7 +24,6 @@ void UBasicAttributeSet::GetLifetimeReplicatedProps(TArray<class FLifetimeProper
 	DOREPLIFETIME_CONDITION_NOTIFY(UBasicAttributeSet, MaxHealth, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UBasicAttributeSet, Stamina, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UBasicAttributeSet, MaxStamina, COND_None, REPNOTIFY_Always);
-	DOREPLIFETIME_CONDITION_NOTIFY(UBasicAttributeSet, Damage, COND_None, REPNOTIFY_Always);
 	DOREPLIFETIME_CONDITION_NOTIFY(UBasicAttributeSet, Heal, COND_None, REPNOTIFY_Always);
 }
 
@@ -45,6 +44,14 @@ void UBasicAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute,
 void UBasicAttributeSet::PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data)
 {
 	Super::PostGameplayEffectExecute(Data);
+
+	if (Data.EvaluatedData.Attribute == GetDamageAttribute())
+	{
+		float TotalDamage = GetDamage();
+		SetDamage(0.0f);
+
+		SetHealth(GetHealth() - TotalDamage);
+	}
 
 	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
 	{
