@@ -6,6 +6,15 @@
 #include "Abilities/GameplayAbility.h"
 #include "BaseGameplayAbility.generated.h"
 
+UENUM(BlueprintType)
+enum class EAbilityInputID : uint8
+{
+	None UMETA(DisplayName = "None"),
+	Primary UMETA(DisplayName = "Primary"),
+	Secondary UMETA(DisplayName = "Secondary"),
+	Movement UMETA(DisplayName = "Movement")
+};
+
 /**
  * 
  */
@@ -17,4 +26,7 @@ class GAMEPLAYCOURSE_API UBaseGameplayAbility : public UGameplayAbility
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	bool bShowInAbilitiesBar = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
+	EAbilityInputID AbilityInputID = EAbilityInputID::None;
 };

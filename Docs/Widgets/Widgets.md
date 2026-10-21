@@ -1,7 +1,7 @@
 ## Hooking Up Stamina And Health Widgets
 In this section we will see what kind of wait for attribute change events we can utilize in order to communicate from our player to widget.
 
-# Creating HUD
+## Creating HUD
 HUD will contain canvas and other widgets that include our health and stamina bar, after containing a HUD widget and adding canvas panel, create another user widget and call it `WBPHealthStamina`.
 
 Inside the health and stamina widget add two progress bars wrapped in a vertical box. Add this widget to your HUD widget.

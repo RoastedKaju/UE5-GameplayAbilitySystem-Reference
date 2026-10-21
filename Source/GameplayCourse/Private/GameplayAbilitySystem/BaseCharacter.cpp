@@ -5,6 +5,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "GameplayAbilitySystem/BaseGameplayAbility.h"
 
 ABaseCharacter::ABaseCharacter()
 {
@@ -77,7 +78,12 @@ TArray<FGameplayAbilitySpecHandle> ABaseCharacter::GrantAbilities(TArray<TSubcla
 
 	for (const TSubclassOf<UGameplayAbility> Ability : AbilitiesToGrant)
 	{
-		Handles.Add(AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(Ability, 1, -1, this)));
+		int32 InputID = -1;
+		if (const UBaseGameplayAbility* BaseAbilityCDO = GetDefault<UBaseGameplayAbility>(Ability))
+		{
+			InputID = static_cast<int32>(BaseAbilityCDO->AbilityInputID);
+		}
+		Handles.Add(AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(Ability, 1, InputID, this)));
 	}
 
 	return Handles;
