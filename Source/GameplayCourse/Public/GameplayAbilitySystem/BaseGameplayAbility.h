@@ -27,6 +27,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	bool bShowInAbilitiesBar = false;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	bool bAutoActivateOnStart = false;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	EAbilityInputID AbilityInputID = EAbilityInputID::None;
 };

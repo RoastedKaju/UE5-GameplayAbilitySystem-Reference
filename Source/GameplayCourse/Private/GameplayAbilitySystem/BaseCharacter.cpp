@@ -79,11 +79,18 @@ TArray<FGameplayAbilitySpecHandle> ABaseCharacter::GrantAbilities(TArray<TSubcla
 	for (const TSubclassOf<UGameplayAbility> Ability : AbilitiesToGrant)
 	{
 		int32 InputID = -1;
+		bool bShouldActivate = false;
 		if (const UBaseGameplayAbility* BaseAbilityCDO = GetDefault<UBaseGameplayAbility>(Ability))
 		{
 			InputID = static_cast<int32>(BaseAbilityCDO->AbilityInputID);
+			bShouldActivate = BaseAbilityCDO->bAutoActivateOnStart;
 		}
 		Handles.Add(AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(Ability, 1, InputID, this)));
+
+		if (bShouldActivate)
+		{
+			AbilitySystemComponent->TryActivateAbility(Handles.Last());
+		}
 	}
 
 	return Handles;
