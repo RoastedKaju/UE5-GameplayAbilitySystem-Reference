@@ -129,5 +129,15 @@ And inside your character class on input you can send another gameplay event tha
 In your base ability class you can create a very handy function that allows you to check if the user is AI Controller or Player, this is very helpful in abilities that don't work when the user is AI or requires input.
 
 ```cpp
-Code Here
+bool UBaseGameplayAbility::IsPlayerControlled() const
+{
+    const AActor* Avatar = GetAvatarActorFromActorInfo();
+
+    if (!Avatar)
+        return false;
+
+    const AController* Controller = Avatar->GetInstigatorController();
+
+    return Controller && Controller->IsA<APlayerController>();
+}
 ```
