@@ -33,11 +33,11 @@ void UBasicAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute,
 
 	if (Attribute == GetHealthAttribute())
 	{
-		Health = FMath::Clamp<float>(NewValue, 0.0f, GetMaxHealth());
+		NewValue = FMath::Clamp<float>(NewValue, 0.0f, GetMaxHealth());
 	}
 	else if (Attribute == GetStaminaAttribute())
 	{
-		Stamina = FMath::Clamp<float>(NewValue, 0.0f, GetMaxStamina());
+		NewValue = FMath::Clamp<float>(NewValue, 0.0f, GetMaxStamina());
 	}
 }
 
